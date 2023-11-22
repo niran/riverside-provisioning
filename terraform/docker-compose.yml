@@ -1,3 +1,5 @@
 services:
   main:
     build: .
+    volumes:
+      - ./mnt/aws-config:/home/worker/.aws

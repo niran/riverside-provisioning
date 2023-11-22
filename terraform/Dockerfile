@@ -17,4 +17,8 @@ RUN if [ "$TARGETARCH" = "arm64" ]; \
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
+RUN groupadd worker && useradd --no-log-init -m -g worker worker
+USER worker:worker
+WORKDIR /home/worker
+
 CMD [ "bash" ]

@@ -20,5 +20,6 @@ RUN ./aws/install
 RUN groupadd worker && useradd --no-log-init -m -g worker worker
 USER worker:worker
 WORKDIR /home/worker
+RUN mkdir -p /home/worker/.terraform.d/plugin-cache
 
 CMD [ "bash" ]

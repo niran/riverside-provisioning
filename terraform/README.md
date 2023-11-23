@@ -1,5 +1,5 @@
 ```
-docker compose run -v $(readlink -f ..)/$PROJECT:/project main
+docker compose run -v "$(readlink -f ..)/$PROJECT:/project" main
 ```
 
 Configuration

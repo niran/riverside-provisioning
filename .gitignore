@@ -1,1 +1,4 @@
-terraform/mnt
+terraform/mnt/aws-config
+*/.terraform
+*/.terraform.lock.hcl
+*.tfstate

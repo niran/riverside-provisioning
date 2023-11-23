@@ -3,3 +3,4 @@ services:
     build: .
     volumes:
       - ./mnt/aws-config:/home/worker/.aws
+      - ./mnt/terraformrc:/home/worker/.terraformrc

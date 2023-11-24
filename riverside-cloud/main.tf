@@ -22,19 +22,34 @@ resource "aws_instance" "riverside_utility" {
   }
 }
 
-resource "aws_ebs_volume" "riverside_utility" {
-  availability_zone = "us-east-2b"
-  size              = 20
-  encrypted         = true
-  type              = "gp3"
+# The EBS volume was created with Terraform as a resource, but we never want it
+# to be destroyed. After creation, we import it as a data source that Terraform
+# will never destroy.
+#
+# 1) Uncomment the resource block and run `terraform apply` to create a new volume.
+# 2) Comment the resource block and record the new volume id in the data source block.
+# 3) `terraform state rm aws_ebs_volume.riverside_utility`
+#
+# resource "aws_ebs_volume" "riverside_utility" {
+#   availability_zone = "us-east-2b"
+#   size              = 20
+#   encrypted         = true
+#   type              = "gp3"
+#
+#   tags = {
+#     Name = "RiversideUtilityVolume"
+#   }
+# }
 
-  tags = {
-    Name = "RiversideUtilityVolume"
+data "aws_ebs_volume" "riverside_utility" {
+  filter {
+    name = "volume-id"
+    values = ["vol-0433a3e0312547522"]
   }
 }
 
 resource "aws_volume_attachment" "riverside_utility" {
   device_name = "/dev/sdf"
-  volume_id   = aws_ebs_volume.riverside_utility.id
+  volume_id   = data.aws_ebs_volume.riverside_utility.id
   instance_id = aws_instance.riverside_utility.id
 }

@@ -22,6 +22,12 @@ echo $PUBLIC_KEY >> /home/$NEW_USER/.ssh/authorized_keys
 chmod 600 /home/$NEW_USER/.ssh/authorized_keys
 chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh/authorized_keys
 
+# --------
+# Hostname
+# --------
+
+hostnamectl set-hostname riverside
+
 # ----------
 # EBS Volume
 # ----------

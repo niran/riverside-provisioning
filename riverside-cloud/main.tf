@@ -87,3 +87,15 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_ipv6" {
   cidr_ipv6   = "::/0"
   ip_protocol = "-1"
 }
+
+data "aws_route53_zone" "niran_org" {
+  name = "niran.org."
+}
+
+resource "aws_route53_record" "riverside_utility" {
+  zone_id = data.aws_route53_zone.niran_org.zone_id
+  name    = "riverside.${data.aws_route53_zone.niran_org.name}"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_instance.riverside_utility.public_ip]
+}

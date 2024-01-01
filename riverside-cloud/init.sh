@@ -54,6 +54,11 @@ hostnamectl set-hostname riverside
 EBS_UUID="b9b7fd82-9090-48c8-8960-7331d81a7934"
 echo "UUID=$EBS_UUID  /workspace  xfs  defaults,nofail  0  2" >> /etc/fstab
 mkdir -p /workspace
+
+EBS_DOCKER_UUID="6e8610a8-0926-4a95-8760-660508594791"
+echo "UUID=$EBS_DOCKER_UUID  /var/lib/docker  xfs  defaults,nofail  0  2" >> /etc/fstab
+mkdir -p /var/lib/docker
+
 mount -a
 
 # ------

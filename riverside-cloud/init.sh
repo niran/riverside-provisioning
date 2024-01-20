@@ -99,3 +99,9 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of
 
 curl -L "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" -o vscode-cli-amd64.tar.gz
 tar -xzf vscode-cli-amd64.tar.gz -C /usr/local/bin
+
+# ---------------
+# Update packages
+# ---------------
+
+apt update && apt upgrade -y -q

@@ -1,0 +1,12 @@
+services:
+  main:
+    build: .
+    # rclone runs its webserver on the loopback device, which is isolated
+    # within the container by default. Use the host network mode to handle this.
+    # On non-Linux machines (including Docker Desktop), this doesn't work,
+    # so you'll need to run a non-containerized rclone instance somewhere.
+    network_mode: host
+    ports:
+      - "127.0.0.1:53682:53682"
+    volumes:
+      - ./mnt/rclone-config:/home/runner/.config/rclone

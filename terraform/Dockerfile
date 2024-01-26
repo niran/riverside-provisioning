@@ -17,9 +17,12 @@ RUN if [ "$TARGETARCH" = "arm64" ]; \
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
+RUN mkdir -p /project
+
 RUN groupadd worker && useradd --no-log-init -m -g worker worker
 USER worker:worker
-WORKDIR /home/worker
 RUN mkdir -p /home/worker/.terraform.d/plugin-cache
+
+WORKDIR /project
 
 CMD [ "bash" ]

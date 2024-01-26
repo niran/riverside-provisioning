@@ -44,24 +44,6 @@ chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh/authorized_keys
 
 hostnamectl set-hostname riverside
 
-# ----------
-# EBS Volume
-# ----------
-
-# A brand new EBS volume needs a filesystem formatted on it before mounting. XFS was the
-# example filesystem in the AWS docs, so that's what was used when this was written.
-# After formatting, the resulting UUID is used in /etc/fstab to mount it at startup.
-
-EBS_UUID="b9b7fd82-9090-48c8-8960-7331d81a7934"
-echo "UUID=$EBS_UUID  /workspace  xfs  defaults,nofail  0  2" >> /etc/fstab
-mkdir -p /workspace
-
-EBS_DOCKER_UUID="6e8610a8-0926-4a95-8760-660508594791"
-echo "UUID=$EBS_DOCKER_UUID  /var/lib/docker  xfs  defaults,nofail  0  2" >> /etc/fstab
-mkdir -p /var/lib/docker
-
-mount -a
-
 # ------
 # Docker
 # ------
@@ -106,3 +88,35 @@ tar -xzf vscode-cli-amd64.tar.gz -C /usr/local/bin
 # ---------------
 
 apt update && apt upgrade -y -q
+
+# ----------
+# EBS Volume
+# ----------
+
+# A brand new EBS volume needs a filesystem formatted on it before mounting. XFS was the
+# example filesystem in the AWS docs, so that's what was used when this was written.
+# After formatting, the resulting UUID is used in /etc/fstab to mount it at startup.
+
+EBS_UUID="b9b7fd82-9090-48c8-8960-7331d81a7934"
+echo "UUID=$EBS_UUID  /workspace  xfs  defaults,nofail  0  2" >> /etc/fstab
+mkdir -p /workspace
+
+EBS_DOCKER_UUID="6e8610a8-0926-4a95-8760-660508594791"
+echo "UUID=$EBS_DOCKER_UUID  /var/lib/docker  xfs  defaults,nofail  0  2" >> /etc/fstab
+mkdir -p /var/lib/docker
+
+# We attempt to mount the EBS volumes as late in this script as possible in the hopes of
+# giving Terraform enough time to attach the volumes to the machine. In practice, this script
+# seems to finish running minutes after the instance has been created, and attaching the EBS
+# volumes only takes about 20 seconds. But in theory, mounting can fail, and if it
+# does, this command and the remainder of the script will need to be repeated.
+mount -a
+
+# --------
+# dotfiles
+# --------
+
+DOTFILE_INSTALLER="/workspace/dotfiles/install.sh"
+if [[ -f "$DOTFILE_INSTALLER" ]]; then
+  su - $NEW_USER -c "bash '$DOTFILE_INSTALLER'"
+fi

@@ -2,5 +2,5 @@ services:
   main:
     build: .
     volumes:
-      - ./mnt/aws-config:/home/worker/.aws
-      - ./mnt/terraformrc:/home/worker/.terraformrc
+      - ./mnt/aws-config:/home/runner/.aws
+      - ./mnt/terraformrc:/home/runner/.terraformrc

@@ -19,9 +19,16 @@ RUN ./aws/install
 
 RUN mkdir -p /project
 
-RUN groupadd worker && useradd --no-log-init -m -g worker worker
-USER worker:worker
-RUN mkdir -p /home/worker/.terraform.d/plugin-cache
+# Since this container is intended for use with bind mounts, the user needs
+# to be able to specify their uid and gid to match the host machine.
+ARG UID=1001
+ARG GID=1001
+
+RUN groupadd -g "${GID}" runner && \
+  useradd --create-home --no-log-init -u "${UID}" -g "${GID}" runner
+
+USER runner:runner
+RUN mkdir -p /home/runner/.terraform.d/plugin-cache
 
 WORKDIR /project
 
